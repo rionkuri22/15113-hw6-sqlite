@@ -1,0 +1,5 @@
+Model: Gemini and Antigravity
+I am going to create a SQL database to store my bucketlist. Given , need to have some kind of filtering or sorting feature for this class project, suggest column names and data types.
+For example I am thinking of a column where I input a age to record when I want to tick the items off by
+
+I am going to have som kind of location column. Is there a way to suport input of continents or areas instead of a speciic country? Can I make this support NaNs also?

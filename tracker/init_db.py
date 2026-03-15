@@ -4,7 +4,7 @@ import sqlite3
 con = sqlite3.connect('my_tracker.db')
 cur = con.cursor()
 
-# Create your table (if it doesn't already exist)
+# Create table (if it doesn't already exist)
 cur.execute('''
     CREATE TABLE IF NOT EXISTS books (
         id INTEGER PRIMARY KEY,

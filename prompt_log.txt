@@ -3,3 +3,21 @@ I am going to create a SQL database to store my bucketlist. Given , need to have
 For example I am thinking of a column where I input a age to record when I want to tick the items off by
 
 I am going to have som kind of location column. Is there a way to suport input of continents or areas instead of a speciic country? Can I make this support NaNs also?
+
+I am making a bucket list app that uses a SQLite database and python to store, retrieve, update, and delete data. Its read function must include support for filtering and sorting the data. 
+For now, I want to start with no front-end and just works on CLI. 
+First, write a function that takes user input and inserts a new record into the table.
+These are the columns I want on each row and the type of data that would go inside them:
+Id 
+Title: text
+Category: text
+Target_age: integer
+Estimated_cost: integer
+Location: text
+Is_completed: boolean
+Make sure to use parameterized queries to avoid SQL injection.
+
+That specific commenad is giving an error
+(base) rion@MacBook-Air-365 15113-hw6-sqlite % python3 bucket_list.py
+/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rion/Desktop/Github/15113-hw6-sqlite/bucket_list.py': [Errno 2] No such file or directory
+I am a beginner. Explain what command I type into the terminal to INSERT new bucketlist goals

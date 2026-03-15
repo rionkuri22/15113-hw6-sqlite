@@ -443,13 +443,13 @@
             </form>
         </div>
 
-        <h2 class="items-section-title">My Goals <span class="highlight">({{ items|length }})</span></h2>
+        <h2 class="items-section-title" id="goalsTitle">My Goals <span class="highlight">({{ items|length }})</span></h2>
         
         <div style="display: flex; gap: 30px; align-items: flex-start;">
             <!-- Filter and Search Sidebar -->
             <div class="form-card" style="flex: 0 0 280px; position: sticky; top: 100px; padding: 25px; margin-bottom: 0;">
                 <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 18px;">Filter & Sort</h3>
-                <form action="{{ url_for('index') }}" method="GET" style="margin: 0;">
+                <form action="{{ url_for('index') }}" method="GET" style="margin: 0;" id="filterForm">
                     <div style="display: flex; flex-direction: column; gap: 15px;">
                         <div class="form-group">
                             <label style="font-size: 12px;">Search</label>
@@ -649,6 +649,54 @@
         // Close when clicking outside of the modal content
         editModal.addEventListener('click', (e) => {
             if (e.target === editModal) closeEditModal();
+        });
+
+        // --- Smooth Filter/Search (AJAX) ---
+        const filterForm = document.getElementById('filterForm');
+        const itemsList = document.querySelector('.item-list');
+        const goalsTitle = document.getElementById('goalsTitle');
+
+        filterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(filterForm);
+            const params = new URLSearchParams();
+            for (const [key, value] of formData) {
+                if (value) params.append(key, value);
+            }
+            
+            const url = `${filterForm.action}?${params.toString()}`;
+            
+            try {
+                // Dim the list to show loading state
+                itemsList.style.opacity = '0.5';
+                itemsList.style.pointerEvents = 'none';
+                
+                const response = await fetch(url);
+                const html = await response.text();
+                
+                // Parse document to extract the list and title
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                const newItems = doc.querySelector('.item-list');
+                const newTitle = doc.getElementById('goalsTitle');
+                
+                // Update DOM
+                itemsList.innerHTML = newItems.innerHTML;
+                goalsTitle.innerHTML = newTitle.innerHTML;
+                
+                // Update URL for sharing/refreshing
+                window.history.pushState({}, '', url);
+            } catch (err) {
+                console.error('Filter error:', err);
+                // Fallback to normal submission if AJAX fails
+                filterForm.submit();
+            } finally {
+                itemsList.style.opacity = '1';
+                itemsList.style.pointerEvents = 'auto';
+            }
         });
     </script>
 

@@ -1,5 +1,7 @@
 import sqlite3
 
+# DATABASE INITIALIZATION
+# This logic ensures the database and table exist before the app starts.
 def init_db():
     con = sqlite3.connect('bucket_list.db')
     cur = con.cursor()
@@ -18,6 +20,8 @@ def init_db():
     con.commit()
     con.close()
 
+# CREATE OPERATION: Terminal Input
+# Collects user input with simple validation and saves it to a new row.
 def insert_bucket_list_item():
     print("\n--- Add a New Bucket List Item ---")
     title = input("Enter title (required): ").strip()
@@ -54,6 +58,9 @@ def insert_bucket_list_item():
         VALUES (?, ?, ?, ?, ?, ?)
     '''
     
+    # We use '?' as placeholders to safely pass variables into the SQL command.
+    # This prevents users from typing malicious code into input prompts.
+    
     try:
         cur.execute(sql, (title, category, target_age, estimated_cost, location, is_completed))
         con.commit()
@@ -63,6 +70,8 @@ def insert_bucket_list_item():
     finally:
         con.close()
 
+# READ OPERATION: Terminal View & Filter
+# Fetches data based on user keywords, categories, or status.
 def view_bucket_list():
     print("\n--- View/Search Bucket List ---")
     search_keyword = input("Search keyword (Search title/category/location, blank for all): ").strip()
@@ -119,6 +128,8 @@ def view_bucket_list():
     finally:
         con.close()
 
+# HELPER: Fetch Single Item
+# Used by Update and Delete functions to show the user exactly what they selected.
 def get_item_by_id(item_id):
     con = sqlite3.connect('bucket_list.db')
     cur = con.cursor()
@@ -127,6 +138,8 @@ def get_item_by_id(item_id):
     con.close()
     return row
 
+# UPDATE OPERATION: Modify Existing Item
+# Allows users to selectively update fields by leaving others blank.
 def update_bucket_list_item():
     print("\n--- Update a Bucket List Item ---")
     item_id_input = input("Enter the ID of the item to update: ").strip()
@@ -179,6 +192,7 @@ def update_bucket_list_item():
             SET title = ?, category = ?, target_age = ?, estimated_cost = ?, location = ?, is_completed = ?
             WHERE id = ?
         ''', (title, category, target_age, estimated_cost, location, is_completed, item_id))
+        # Don't forget to commit or the changes won't be saved!
         con.commit()
         print(f"\nSuccessfully updated item ID {item_id}!")
     except sqlite3.Error as e:
@@ -186,6 +200,8 @@ def update_bucket_list_item():
     finally:
         con.close()
 
+# DELETE OPERATION: Safety First
+# Displays the item details and asks for a final 'y' before removing.
 def delete_bucket_list_item():
     print("\n--- Delete a Bucket List Item ---")
     item_id_input = input("Enter the ID of the item to delete: ").strip()
@@ -219,6 +235,8 @@ def delete_bucket_list_item():
     finally:
         con.close()
 
+# MAIN NAVIGATION
+# The loop that keeps the CLI running until the user chooses to exit.
 def main_menu():
     init_db()
     while True:

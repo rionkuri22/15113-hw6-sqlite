@@ -4,11 +4,13 @@ from flask import Flask, render_template, request, redirect, url_for
 app = Flask(__name__)
 DB_FILE = 'bucket_list.db'
 
+# Create a connection to the SQLite database file
 def get_db_connection():
     conn = sqlite3.connect(DB_FILE)
     conn.row_factory = sqlite3.Row
     return conn
 
+# READ
 @app.route('/')
 def index():
     conn = get_db_connection()
@@ -19,7 +21,7 @@ def index():
     completed = request.args.get('completed', '').strip()
     sort_by = request.args.get('sort', 'id').strip()
     
-    # Build query
+    # Build the base SQL query
     query = "SELECT * FROM bucket_list WHERE 1=1"
     params = []
     
@@ -43,10 +45,15 @@ def index():
     elif sort_by == 'age':
         query += " ORDER BY target_age ASC"
     elif sort_by == 'cost':
-        query += " ORDER BY estimated_cost ASC"
-    elif sort_by == 'completed':
-        query += " ORDER BY is_completed ASC"
-    else:  # default id
+        query += """ ORDER BY 
+            CASE estimated_cost 
+                WHEN 'low' THEN 1 
+                WHEN 'medium' THEN 2 
+                WHEN 'high' THEN 3 
+                WHEN 'super high' THEN 4 
+                ELSE 5 
+            END ASC"""
+    else:  
         query += " ORDER BY id DESC"
 
     # Execute main query
@@ -61,6 +68,7 @@ def index():
                            search=search, current_category=category, 
                            completed=completed, sort_by=sort_by)
 
+# CREATE
 @app.route('/add', methods=('GET', 'POST'))
 def add():
     if request.method == 'POST':
@@ -76,6 +84,8 @@ def add():
             return redirect(url_for('index'))
 
         conn = get_db_connection()
+        # Execute the INSERT statement
+        # Using '?' placeholders prevents SQL injection by separating commands from data.
         conn.execute('''
             INSERT INTO bucket_list (title, category, target_age, estimated_cost, location, is_completed)
             VALUES (?, ?, ?, ?, ?, ?)
@@ -83,8 +93,9 @@ def add():
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
-    return redirect(url_for('index'))
+        return redirect(url_for('index'))
 
+# UPDATE 
 @app.route('/update/<int:id>', methods=('GET', 'POST'))
 def update(id):
     conn = get_db_connection()
@@ -110,6 +121,7 @@ def update(id):
     conn.close()
     return redirect(url_for('index'))
 
+# DELETE
 @app.route('/delete/<int:id>', methods=('POST',))
 def delete(id):
     conn = get_db_connection()
@@ -118,6 +130,7 @@ def delete(id):
     conn.close()
     return redirect(url_for('index'))
 
+# UPDATE
 @app.route('/toggle-complete/<int:id>', methods=('POST',))
 def toggle_complete(id):
     conn = get_db_connection()

@@ -476,10 +476,9 @@
                             <label style="font-size: 12px;">Sort By</label>
                             <select name="sort" style="padding: 10px 14px; margin-bottom: 10px;">
                                 <option value="id_desc" {% if sort_by == 'id_desc' %}selected{% endif %}>Default</option>
-                                <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title</option>
+                                <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title (Alphabetical)</option>
                                 <option value="age" {% if sort_by == 'age' %}selected{% endif %}>Age</option>
-                                <option value="cost" {% if sort_by == 'cost' %}selected{% endif %}>Cost</option>
-                                <option value="completed" {% if sort_by == 'completed' %}selected{% endif %}>Status</option>
+                                <option value="cost" {% if sort_by == 'cost' %}selected{% endif %}>Cost (Low to High)</option>
                             </select>
                             <button type="submit" class="btn-submit" style="margin: 0; padding: 10px 16px; border-radius: 12px; width: 100%;">Apply Filters</button>
                         </div>

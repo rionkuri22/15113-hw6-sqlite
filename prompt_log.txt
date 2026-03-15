@@ -35,3 +35,7 @@ Create a simple user interface that follows the same aesthetics as this website:
 The user should be able to conduct all of CRUD without entering the terminal.
 
 Is there a way to make the page not scroll all the way back up to the top when do a search/filtering?
+
+Make it clear on Flask app that sorting by title menas in alphabetical order.
+Sorting in cost shouild be from low to super high.
+Delete option to sort by status

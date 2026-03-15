@@ -18,6 +18,7 @@ Estimated_cost: integer
 Location: text
 Is_completed: boolean
 Make sure to use parameterized queries to avoid SQL injection.
+Explain all the SQL line by line.
 
 That specific commenad is giving an error
 (base) rion@MacBook-Air-365 15113-hw6-sqlite % python3 bucket_list.py
@@ -28,6 +29,9 @@ Change so that target age and estimated cost should be filled. The only one that
 Also make sure to use parameterized queries to avoid SQL injection and explain simply how you are achieving that. 
 
 Implement update and delete. Make sure to ask for confirmation before deleting. Both should also show the user the specific entry they are about to modify or delete so that they know they have selected the right one.
+Explain all the SQL line by line.
 
 Create a simple user interface that follows the same aesthetics as this website: https://rionkuri22.github.io/
 The user should be able to conduct all of CRUD without entering the terminal.
+
+Is there a way to make the page not scroll all the way back up to the top when do a search/filtering?

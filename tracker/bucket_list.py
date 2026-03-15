@@ -119,13 +119,115 @@ def view_bucket_list():
     finally:
         con.close()
 
+def get_item_by_id(item_id):
+    con = sqlite3.connect('bucket_list.db')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM bucket_list WHERE id = ?", (item_id,))
+    row = cur.fetchone()
+    con.close()
+    return row
+
+def update_bucket_list_item():
+    print("\n--- Update a Bucket List Item ---")
+    item_id_input = input("Enter the ID of the item to update: ").strip()
+    if not item_id_input.isdigit():
+        print("Invalid ID.")
+        return
+    item_id = int(item_id_input)
+    
+    row = get_item_by_id(item_id)
+    if not row:
+        print("Item not found.")
+        return
+        
+    print("\nYou are about to modify this entry:")
+    is_done = "Yes" if row[6] else "No"
+    print(f"ID: {row[0]} | Title: {row[1]} | Category: {row[2]} | Age: {row[3]} | Cost: {row[4]} | Loc: {row[5] if row[5] else 'N/A'} | Done: {is_done}")
+    
+    print("\nEnter new values (leave blank to keep current value):")
+    
+    title = input(f"Enter title [{row[1]}]: ").strip() or row[1]
+    category = input(f"Enter category [{row[2]}]: ").strip() or row[2]
+    
+    target_age_input = input(f"Enter target age [{row[3]}]: ").strip()
+    target_age = int(target_age_input) if target_age_input.isdigit() else row[3]
+    
+    estimated_cost_input = input(f"Enter estimated cost [{row[4]}]: ").strip().lower()
+    estimated_cost = estimated_cost_input if estimated_cost_input else row[4]
+    
+    location_input = input(f"Enter location [{row[5] if row[5] else 'None'}]: ").strip()
+    if not location_input:
+        location = row[5]
+    elif location_input.lower() == 'none':
+        location = None
+    else:
+        location = location_input
+        
+    is_completed_input = input(f"Is it completed? (y/n) [{'Yes' if row[6] else 'No'}]: ").strip().lower()
+    if is_completed_input in ['y', 'yes', 'true']:
+        is_completed = True
+    elif is_completed_input in ['n', 'no', 'false']:
+        is_completed = False
+    else:
+        is_completed = bool(row[6])
+
+    con = sqlite3.connect('bucket_list.db')
+    cur = con.cursor()
+    try:
+        cur.execute('''
+            UPDATE bucket_list 
+            SET title = ?, category = ?, target_age = ?, estimated_cost = ?, location = ?, is_completed = ?
+            WHERE id = ?
+        ''', (title, category, target_age, estimated_cost, location, is_completed, item_id))
+        con.commit()
+        print(f"\nSuccessfully updated item ID {item_id}!")
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        con.close()
+
+def delete_bucket_list_item():
+    print("\n--- Delete a Bucket List Item ---")
+    item_id_input = input("Enter the ID of the item to delete: ").strip()
+    if not item_id_input.isdigit():
+        print("Invalid ID.")
+        return
+    item_id = int(item_id_input)
+    
+    row = get_item_by_id(item_id)
+    if not row:
+        print("Item not found.")
+        return
+        
+    print("\nYou are about to DELETE this entry:")
+    is_done = "Yes" if row[6] else "No"
+    print(f"ID: {row[0]} | Title: {row[1]} | Category: {row[2]} | Age: {row[3]} | Cost: {row[4]} | Loc: {row[5] if row[5] else 'N/A'} | Done: {is_done}")
+    
+    confirm = input("\nAre you SURE you want to delete this item? (y/N): ").strip().lower()
+    if confirm not in ['y', 'yes', 'true']:
+        print("Deletion cancelled.")
+        return
+        
+    con = sqlite3.connect('bucket_list.db')
+    cur = con.cursor()
+    try:
+        cur.execute("DELETE FROM bucket_list WHERE id = ?", (item_id,))
+        con.commit()
+        print(f"\nSuccessfully deleted item ID {item_id}.")
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        con.close()
+
 def main_menu():
     init_db()
     while True:
         print("\n=== Bucket List CLI ===")
         print("1. Add Item")
         print("2. View List (Sort/Filter)")
-        print("3. Exit")
+        print("3. Update Item")
+        print("4. Delete Item")
+        print("5. Exit")
         choice = input("Choose an option: ")
 
         if choice == "1":
@@ -133,6 +235,10 @@ def main_menu():
         elif choice == "2":
             view_bucket_list()
         elif choice == "3":
+            update_bucket_list_item()
+        elif choice == "4":
+            delete_bucket_list_item()
+        elif choice == "5":
             print("Goodbye!")
             break
         else:

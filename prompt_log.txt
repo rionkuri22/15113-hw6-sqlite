@@ -1,4 +1,6 @@
 Model: Gemini and Antigravity
+
+Some key prompts:
 I am going to create a SQL database to store my bucketlist. Given , need to have some kind of filtering or sorting feature for this class project, suggest column names and data types.
 For example I am thinking of a column where I input a age to record when I want to tick the items off by
 
@@ -20,4 +22,12 @@ Make sure to use parameterized queries to avoid SQL injection.
 That specific commenad is giving an error
 (base) rion@MacBook-Air-365 15113-hw6-sqlite % python3 bucket_list.py
 /Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rion/Desktop/Github/15113-hw6-sqlite/bucket_list.py': [Errno 2] No such file or directory
-I am a beginner. Explain what command I type into the terminal to INSERT new bucketlist goals
+I am a beginner. Explain what command I type into the terminal to run this.
+
+Change so that target age and estimated cost should be filled. The only one that supports NaN is location.
+Also make sure to use parameterized queries to avoid SQL injection and explain simply how you are achieving that. 
+
+Implement update and delete. Make sure to ask for confirmation before deleting. Both should also show the user the specific entry they are about to modify or delete so that they know they have selected the right one.
+
+Create a simple user interface that follows the same aesthetics as this website: https://rionkuri22.github.io/
+The user should be able to conduct all of CRUD without entering the terminal.

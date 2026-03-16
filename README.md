@@ -38,7 +38,7 @@ Delete
 ## How to run
 Option A: Terminal (CLI)
 - Open the terminal in the project folder
-- Run the command: python3 bucket_list.py
+- Run the command: python3 tracker/bucket_list.py
 - Follow the menu to perform the CRUD operations
 - When finished, 5 to end session
 

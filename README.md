@@ -40,9 +40,11 @@ Option A: Terminal (CLI)
 - Open the terminal in the project folder
 - Run the command: python3 bucket_list.py
 - Follow the menu to perform the CRUD operations
+- When finished, 5 to end session
 
 Option B: Web Interface (Flask app)
 - Open the terminal in the project folder
-- (IF you are accessing this for the first time): Run the command: pip3 install flask
+- (IF not already installed): Run the command: pip3 install flask
 - Run the command: python3 app.py
 - Go to the URL in your browser of choice: http://127.0.0.1:5000/
+- When finished, CTRL + C to stop the server
